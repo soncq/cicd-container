@@ -6,11 +6,11 @@ phases:
       - $(aws ecr get-login --no-include-email --region us-east-1)
   build:
     commands:
-      - docker build -t youtube .
-      - docker tag youtube:latest public.ecr.aws/d1z6h0x7/youtube:latest
+      - docker build -t youtube:latest .
+      - docker tag <IMAGE_NAME> <ECR_URL>
   post_build:
     commands:
-      - docker push public.ecr.aws/d1z6h0x7/youtube:latest
-      - printf '[{"name":"youtube","imageUri":"%s"}]' public.ecr.aws/d1z6h0x7/youtube:latest > imagedefinitions.json
+      - docker push <ECR_URL>
+      - printf '[{"name":<TASK_DEFINITION_NAME>,"imageUri":"%s"}]' <ECR_URL> > imagedefinitions.json
 artifacts:
   files: imagedefinitions.json
