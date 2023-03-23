@@ -3,16 +3,14 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
-      - aws --version
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin public.ecr.aws/d1z6h0x7
+      aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/d1z6h0x7
   build:
     commands:
-      - docker build -t youtube .
-      - docker tag youtube:latest public.ecr.aws/d1z6h0x7/youtube:latest
+      docker build -t youtube .
+      docker tag youtube:latest public.ecr.aws/d1z6h0x7/youtube:latest
   post_build:
     commands:
-      - docker push public.ecr.aws/d1z6h0x7/youtube:latest
-      - printf '[{"name":"youtube","imageUri":"%s"}]' public.ecr.aws/d1z6h0x7/youtube:latest > imagedefinitions.json
+      docker push public.ecr.aws/d1z6h0x7/youtube:latest
+      printf '[{"name":"youtube","imageUri":"%s"}]' public.ecr.aws/d1z6h0x7/youtube:latest > imagedefinitions.json
 artifacts:
   files: imagedefinitions.json
